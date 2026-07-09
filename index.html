@@ -49,9 +49,16 @@
   th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--divider); vertical-align: top; }
   th { width: 140px; font-weight: 600; color: var(--text); white-space: nowrap; }
   td { color: var(--text-secondary); }
+  .sitenav { display: flex; gap: 18px; max-width: 720px; margin: 0 auto; padding: 20px 20px 0; font-size: 0.85rem; }
+  .sitenav a { color: var(--text-secondary); text-decoration: none; }
+  .sitenav a[aria-current] { color: var(--primary); font-weight: 700; }
 </style>
 </head>
 <body>
+<nav class="sitenav">
+  <a href="./" aria-current="page">개인정보처리방침</a>
+  <a href="./checklist.html">Play Console 답변지</a>
+</nav>
 <main>
 <article>
   <h1>런코스(RunCourse) 개인정보처리방침</h1>

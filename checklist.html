@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>런코스 Play Console 앱 콘텐츠 답변지</title>
+<style>
+  :root {
+    --primary: #006781;
+    --primary-dark: #00505F;
+    --primary-light: #CDE7EC;
+    --primary-xlight: #EAF3F5;
+    --secondary: #2D694D;
+    --surface: #F5F7F7;
+    --card: #FFFFFF;
+    --text: #0E1E1C;
+    --text-secondary: #3F484C;
+    --text-placeholder: #6F787D;
+    --divider: #BEC8CD;
+    --stamp-gold: #F59E0B;
+    --error: #BA1A1A;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #17171A;
+      --card: #212124;
+      --text: #EAEBEE;
+      --text-secondary: #868B94;
+      --text-placeholder: #6B7078;
+      --divider: #34373D;
+      --primary-xlight: #16333B;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface);
+    color: var(--text);
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+      "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .mono {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  .sitenav {
+    display: flex;
+    gap: 18px;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 16px 20px 0;
+    font-size: 13px;
+  }
+  .sitenav a { color: var(--text-secondary); text-decoration: none; }
+  .sitenav a[aria-current] { color: var(--primary); font-weight: 700; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 720px);
+    justify-content: center;
+    gap: 40px;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 24px 20px 96px;
+  }
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    .toc { display: none; }
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-placeholder);
+    margin: 0 0 10px 10px;
+  }
+  .toc a {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13.5px;
+  }
+  .toc a:hover { background: var(--primary-xlight); color: var(--text); }
+  .toc .n {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600;
+    background: var(--divider);
+    color: var(--card);
+    flex-shrink: 0;
+  }
+  .toc .n.done { background: var(--secondary); }
+  .toc .n.action { background: var(--stamp-gold); }
+  .toc .n.review { background: var(--error); }
+
+  header.page { margin-bottom: 8px; }
+  header.page .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--primary);
+  }
+  header.page h1 { font-size: 26px; font-weight: 700; margin: 6px 0 8px; text-wrap: balance; }
+  header.page p { color: var(--text-secondary); max-width: 62ch; margin: 0 0 20px; }
+
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px 18px;
+    padding: 14px 16px; background: var(--card);
+    border: 1px solid var(--divider); border-radius: 12px; margin-bottom: 32px;
+  }
+  .legend .item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text-secondary); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .dot.done { background: var(--secondary); }
+  .dot.action { background: var(--stamp-gold); }
+  .dot.review { background: var(--error); }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--divider); border-radius: 14px;
+    padding: 22px 24px 24px; margin-bottom: 18px; scroll-margin-top: 24px;
+  }
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+  .card-head h2 { font-size: 17px; font-weight: 700; margin: 0; display: flex; align-items: baseline; gap: 8px; }
+  .card-head h2 .idx { font-size: 12px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
+  .chip { flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .chip.done { background: color-mix(in srgb, var(--secondary) 16%, transparent); color: var(--secondary); }
+  .chip.action { background: color-mix(in srgb, var(--stamp-gold) 20%, transparent); color: #8a5a06; }
+  .chip.review { background: color-mix(in srgb, var(--error) 14%, transparent); color: var(--error); }
+
+  .card p.desc { color: var(--text-secondary); margin: 10px 0 14px; }
+  .answer { background: var(--primary-xlight); border: 1px solid var(--primary-light); border-radius: 10px; padding: 12px 14px; margin: 10px 0; }
+  .answer .label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 5px; }
+  .answer .value { font-size: 14px; color: var(--text); word-break: break-word; }
+
+  table.datatable { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  table.datatable th, table.datatable td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--divider); vertical-align: top; }
+  table.datatable thead th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-placeholder); font-weight: 600; border-bottom: 2px solid var(--divider); }
+  table.datatable td { color: var(--text-secondary); }
+  table.datatable td.strong { color: var(--text); font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+
+  ul.plain { margin: 8px 0; padding-left: 20px; color: var(--text-secondary); }
+  ul.plain li { margin: 4px 0; }
+
+  .flag {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: color-mix(in srgb, var(--error) 8%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--error) 30%, var(--divider));
+    border-radius: 10px; padding: 10px 12px; margin-top: 12px; font-size: 13px; color: var(--text);
+  }
+  .flag b { color: var(--error); }
+
+  footer.page { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--divider); color: var(--text-placeholder); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <a href="./">개인정보처리방침</a>
+  <a href="./checklist.html" aria-current="page">Play Console 답변지</a>
+</nav>
+
+<div class="shell">
+  <nav class="toc">
+    <p class="toc-title">9개 항목</p>
+    <a href="#privacy"><span class="n done">✓</span>개인정보처리방침</a>
+    <a href="#access"><span class="n done">✓</span>로그인 세부정보</a>
+    <a href="#ads"><span class="n done">✓</span>광고</a>
+    <a href="#rating"><span class="n action">!</span>콘텐츠 등급</a>
+    <a href="#audience"><span class="n review">?</span>타겟층</a>
+    <a href="#datasafety"><span class="n action">!</span>데이터 보안</a>
+    <a href="#gov"><span class="n done">✓</span>정부 앱</a>
+    <a href="#finance"><span class="n done">✓</span>금융 기능</a>
+    <a href="#health"><span class="n done">✓</span>건강</a>
+  </nav>
+
+  <main>
+    <header class="page">
+      <p class="eyebrow">RunCourse · Play Console 제출 준비</p>
+      <h1>앱 콘텐츠 9개 항목 답변지</h1>
+      <p>
+        코드베이스 조사(권한·API·스키마)에 근거해 작성했습니다. 초록 항목은 그대로
+        복사해 붙여넣으면 되고, 노란 항목은 Play Console 설문에 응답할 때 참고할
+        근거이며, 빨간 항목은 직접 판단이 필요합니다.
+      </p>
+    </header>
+
+    <div class="legend">
+      <span class="item"><span class="dot done"></span>바로 입력 가능</span>
+      <span class="item"><span class="dot action"></span>콘솔 설문 · 근거 있음</span>
+      <span class="item"><span class="dot review"></span>직접 결정 필요</span>
+    </div>
+
+    <section class="card" id="privacy">
+      <div class="card-head">
+        <h2><span class="idx">01</span>개인정보처리방침</h2>
+        <span class="chip done">바로 입력</span>
+      </div>
+      <p class="desc">"앱 콘텐츠 &gt; 개인정보처리방침" URL 필드에 그대로 붙여넣기.</p>
+      <div class="answer">
+        <div class="label">URL</div>
+        <div class="value mono">https://tenmrun.github.io/runcourse-legal/</div>
+      </div>
+      <div class="flag">
+        본문 내 <b>"[문의 이메일 입력 필요]"</b>를 실제 연락처로 교체 후 제출하세요.
+      </div>
+    </section>
+
+    <section class="card" id="access">
+      <div class="card-head">
+        <h2><span class="idx">02</span>로그인 세부정보 (앱 액세스 권한)</h2>
+        <span class="chip done">바로 입력</span>
+      </div>
+      <p class="desc">
+        코드 전체를 확인했지만 회원가입/로그인 기능 자체가 구현되어 있지 않습니다
+        (supabase.auth·소셜 로그인 코드 0건). 모든 기능이 로그인 없이 그대로
+        동작합니다.
+      </p>
+      <div class="answer">
+        <div class="label">선택</div>
+        <div class="value">"예, 모든 사용자가 제한 없이 앱의 모든 기능에 액세스할 수 있습니다"</div>
+      </div>
+      <p class="desc" style="margin-top:14px">테스트 계정 입력란은 비워두면 됩니다 — 계정 시스템이 없습니다.</p>
+    </section>
+
+    <section class="card" id="ads">
+      <div class="card-head">
+        <h2><span class="idx">03</span>광고</h2>
+        <span class="chip done">바로 입력</span>
+      </div>
+      <p class="desc">
+        AdMob 등 광고 SDK가 <code class="mono">build.gradle.kts</code> 의존성에도,
+        코드에도 존재하지 않습니다.
+      </p>
+      <div class="answer">
+        <div class="label">선택</div>
+        <div class="value">"아니요, 앱에 광고가 포함되어 있지 않습니다"</div>
+      </div>
+    </section>
+
+    <section class="card" id="rating">
+      <div class="card-head">
+        <h2><span class="idx">04</span>콘텐츠 등급 (IARC 설문)</h2>
+        <span class="chip action">설문 근거</span>
+      </div>
+      <p class="desc">Play Console이 자체 발급하는 설문이라 대신 제출은 못 하지만, 각 문항에 낼 답은 명확합니다.</p>
+      <div class="table-wrap">
+        <table class="datatable">
+          <thead><tr><th>설문 항목</th><th>응답</th><th>근거</th></tr></thead>
+          <tbody>
+            <tr><td class="strong">폭력성</td><td>없음</td><td>해당 콘텐츠 없음</td></tr>
+            <tr><td class="strong">선정성</td><td>없음</td><td>해당 콘텐츠 없음</td></tr>
+            <tr><td class="strong">욕설/약물/도박</td><td>없음</td><td>해당 콘텐츠 없음</td></tr>
+            <tr><td class="strong">위치 공유</td><td>있음</td><td>GPS 러닝 트래킹·지도 표시</td></tr>
+            <tr><td class="strong">디지털 구매</td><td>없음</td><td>인앱결제 코드 없음</td></tr>
+            <tr><td class="strong">사용자 생성 콘텐츠(리뷰)</td><td>있음</td><td>코스 리뷰 자유 텍스트 작성 가능</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flag">
+        <b>확인 필요</b> — 리뷰 작성 기능(<span class="mono">course_reviews</span>)에
+        신고·차단·모더레이션 기능이 코드에 없습니다. Google Play의 사용자 생성
+        콘텐츠(UGC) 정책은 신고/차단 메커니즘을 요구합니다 — 설문에서 "사용자 상호작용
+        있음"으로 응답하기 전에 이 기능을 먼저 추가하거나, 최소한 정책 위반 리스크를
+        인지하고 진행할지 결정이 필요합니다.
+      </div>
+    </section>
+
+    <section class="card" id="audience">
+      <div class="card-head">
+        <h2><span class="idx">05</span>타겟층</h2>
+        <span class="chip review">직접 결정</span>
+      </div>
+      <p class="desc">
+        연령대 선택은 사업적 판단이라 대신 정할 수 없지만, 참고할 사실은 이렇습니다:
+        GPS 백그라운드 추적 + 카메라(AR/인증샷) 권한을 요구하는 앱이라 아동 대상으로
+        분류되면 COPPA/Google Play 아동 정책의 추가 제약(광고 제한, 데이터 수집 제한
+        등)이 붙습니다.
+      </p>
+      <ul class="plain">
+        <li>만 13세 미만을 <b>주 타겟층에서 제외</b>하는 방향을 권장합니다.</li>
+        <li>"아동의 관심을 끄는 콘텐츠인가?" 질문에는 &ldquo;아니요&rdquo;가 현재 앱 성격(러닝·지도·수집 게임화)과 맞습니다.</li>
+        <li>구체적 연령 구간(예: 만 19세 이상 / 만 13세~) 자체는 직접 정해야 합니다.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="datasafety">
+      <div class="card-head">
+        <h2><span class="idx">06</span>데이터 보안</h2>
+        <span class="chip action">설문 근거</span>
+      </div>
+      <p class="desc">Play Console 폼 문항 순서대로 채울 수 있게 정리했습니다.</p>
+      <div class="table-wrap">
+        <table class="datatable">
+          <thead><tr><th>데이터 유형</th><th>수집</th><th>공유</th><th>목적</th><th>선택 여부</th></tr></thead>
+          <tbody>
+            <tr><td class="strong">위치 (정밀)</td><td>예</td><td>아니요*</td><td>앱 기능(러닝 트래킹)</td><td>필수</td></tr>
+            <tr><td class="strong">사진/동영상</td><td>아니요</td><td>아니요</td><td>기기 로컬 저장만, 서버 미전송</td><td>-</td></tr>
+            <tr><td class="strong">앱 활동 (사용 기록)</td><td>예 (익명)</td><td>아니요</td><td>분석(코스 완주율 통계)</td><td>필수 아님</td></tr>
+            <tr><td class="strong">개인 식별자(이름·이메일 등)</td><td>아니요</td><td>아니요</td><td>로그인 기능 없음</td><td>-</td></tr>
+            <tr><td class="strong">기기·기타 ID (푸시 토큰)</td><td>예</td><td>아니요</td><td>발급만 되고 서버 미등록·미사용</td><td>필수 아님</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flag">
+        <b>*확인 필요</b> — 위치 &ldquo;공유&rdquo; 여부는 카카오맵 SDK가 지도 타일을
+        받아오며 좌표를 카카오 서버로 전달하는지 여부에 달려 있습니다. 이 조사에서는
+        SDK 내부 통신까지는 확인하지 못했습니다. 카카오맵 SDK 이용약관/개발자 문서에서
+        "위치 정보를 자사 서버로 전송하는지"를 확인한 뒤 &ldquo;제3자와 공유&rdquo;
+        여부를 최종 결정해 주세요. (기본값으로 지도 렌더링 SDK는 대부분 &ldquo;공유
+        있음&rdquo;으로 신고하는 것이 안전합니다.)
+      </div>
+      <div class="answer" style="margin-top:14px">
+        <div class="label">암호화 여부 (공통 질문)</div>
+        <div class="value">"예, 전송 중 데이터가 암호화됩니다" — Supabase는 HTTPS/TLS만 사용</div>
+      </div>
+      <div class="answer">
+        <div class="label">삭제 요청 (공통 질문)</div>
+        <div class="value">"이용자가 데이터 삭제를 요청할 수 있는 방법을 제공합니다" — 앱 삭제 시 기기 내 모든 기록 즉시 삭제 (계정 자체가 없어 서버 측 개인 데이터 없음)</div>
+      </div>
+    </section>
+
+    <section class="card" id="gov">
+      <div class="card-head">
+        <h2><span class="idx">07</span>정부 앱</h2>
+        <span class="chip done">바로 입력</span>
+      </div>
+      <p class="desc">공공기관이 아닌 민간 앱입니다.</p>
+      <div class="answer">
+        <div class="label">선택</div>
+        <div class="value">"아니요"</div>
+      </div>
+    </section>
+
+    <section class="card" id="finance">
+      <div class="card-head">
+        <h2><span class="idx">08</span>금융 기능</h2>
+        <span class="chip done">바로 입력</span>
+      </div>
+      <p class="desc">대출·가상자산·결제·송금 등 금융 기능 코드가 없습니다.</p>
+      <div class="answer">
+        <div class="label">선택</div>
+        <div class="value">"아니요, 금융 서비스를 제공하지 않습니다"</div>
+      </div>
+    </section>
+
+    <section class="card" id="health">
+      <div class="card-head">
+        <h2><span class="idx">09</span>건강</h2>
+        <span class="chip done">바로 입력</span>
+      </div>
+      <p class="desc">
+        BODY_SENSORS 권한, Google Fit/Health Connect 연동이 모두 없습니다. 칼로리·거리는
+        앱 자체 계산이며 의료 목적 데이터가 아니라 특별 건강 앱 정책 대상이 아닙니다.
+      </p>
+      <div class="answer">
+        <div class="label">선택</div>
+        <div class="value">"아니요, 건강 관련 특별 정책 대상 앱이 아닙니다"</div>
+      </div>
+    </section>
+
+    <footer class="page">
+      v1.0.0(versionCode 1) 기준 조사. 로그인 기능(#322)이나 리뷰 신고 기능이 추가되면
+      04·06번 항목은 반드시 다시 검토해야 합니다.
+    </footer>
+  </main>
+</div>
+</body>
+</html>

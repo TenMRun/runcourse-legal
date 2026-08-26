@@ -177,7 +177,7 @@
   <nav class="toc">
     <p class="toc-title">9개 항목</p>
     <a href="#privacy"><span class="n done">✓</span>개인정보처리방침</a>
-    <a href="#access"><span class="n done">✓</span>로그인 세부정보</a>
+    <a href="#access"><span class="n review">?</span>로그인 세부정보</a>
     <a href="#ads"><span class="n done">✓</span>광고</a>
     <a href="#rating"><span class="n action">!</span>콘텐츠 등급</a>
     <a href="#audience"><span class="n review">?</span>타겟층</a>
@@ -214,26 +214,28 @@
         <div class="label">URL</div>
         <div class="value mono">https://tenmrun.github.io/runcourse-legal/</div>
       </div>
-      <div class="flag">
-        본문 내 <b>"[문의 이메일 입력 필요]"</b>를 실제 연락처로 교체 후 제출하세요.
-      </div>
     </section>
 
     <section class="card" id="access">
       <div class="card-head">
         <h2><span class="idx">02</span>로그인 세부정보 (앱 액세스 권한)</h2>
-        <span class="chip done">바로 입력</span>
+        <span class="chip review">테스트 계정 필요</span>
       </div>
       <p class="desc">
-        코드 전체를 확인했지만 회원가입/로그인 기능 자체가 구현되어 있지 않습니다
-        (supabase.auth·소셜 로그인 코드 0건). 모든 기능이 로그인 없이 그대로
-        동작합니다.
+        카카오·구글 OAuth 로그인이 구현되어 있습니다(이메일/비밀번호 방식 없음).
+        홈 화면·지도 탐색·코스 상세 열람은 로그인 없이 가능하지만, 러닝 시작·도장
+        컬렉션·내 정보 화면은 로그인이 필요합니다 — 더 이상 "전체 무제한 액세스"가
+        아닙니다.
       </p>
       <div class="answer">
         <div class="label">선택</div>
-        <div class="value">"예, 모든 사용자가 제한 없이 앱의 모든 기능에 액세스할 수 있습니다"</div>
+        <div class="value">"예, 이 앱에는 특별 액세스 권한이 필요한 콘텐츠 또는 기능이 있습니다" 계열 응답 후, 러닝·도장·내정보 기능을 심사팀이 확인할 수 있도록 테스트 계정 정보 제출</div>
       </div>
-      <p class="desc" style="margin-top:14px">테스트 계정 입력란은 비워두면 됩니다 — 계정 시스템이 없습니다.</p>
+      <div class="flag">
+        <b>직접 준비 필요</b> — 카카오 또는 구글 테스트 계정(아이디/비밀번호)을
+        만들어 Play Console 테스트 계정 입력란에 기입해야 합니다. 코드로 대신할 수
+        없는 항목입니다.
+      </div>
     </section>
 
     <section class="card" id="ads">
@@ -307,21 +309,20 @@
         <table class="datatable">
           <thead><tr><th>데이터 유형</th><th>수집</th><th>공유</th><th>목적</th><th>선택 여부</th></tr></thead>
           <tbody>
-            <tr><td class="strong">위치 (정밀)</td><td>예</td><td>아니요*</td><td>앱 기능(러닝 트래킹)</td><td>필수</td></tr>
+            <tr><td class="strong">위치 (정밀)</td><td>예</td><td>예</td><td>앱 기능(러닝 트래킹) + 제3자 공유(TourAPI 주변 코스 검색, 카카오맵 SDK 지도 렌더링)</td><td>필수</td></tr>
             <tr><td class="strong">사진/동영상</td><td>아니요</td><td>아니요</td><td>기기 로컬 저장만, 서버 미전송</td><td>-</td></tr>
-            <tr><td class="strong">앱 활동 (사용 기록)</td><td>예 (익명)</td><td>아니요</td><td>분석(코스 완주율 통계)</td><td>필수 아님</td></tr>
-            <tr><td class="strong">개인 식별자(이름·이메일 등)</td><td>아니요</td><td>아니요</td><td>로그인 기능 없음</td><td>-</td></tr>
-            <tr><td class="strong">기기·기타 ID (푸시 토큰)</td><td>예</td><td>아니요</td><td>발급만 되고 서버 미등록·미사용</td><td>필수 아님</td></tr>
+            <tr><td class="strong">건강 및 피트니스 (피트니스 정보)</td><td>예</td><td>아니요</td><td>앱 기능(러닝 기록: 경로·거리·페이스·칼로리·도장, 로그인 계정에 연결되어 저장)</td><td>필수(러닝 시작 시)</td></tr>
+            <tr><td class="strong">개인 식별자(이름·이메일 등)</td><td>예</td><td>아니요</td><td>계정 관리(카카오/구글 로그인 시 이메일·닉네임·프로필 이미지 수집)</td><td>필수(로그인 시)</td></tr>
+            <tr><td class="strong">기기·기타 ID (푸시 토큰)</td><td>예</td><td>아니요</td><td>앱 기능(FCM 알림 발송, 로그인 계정에 연결되어 서버 등록됨)</td><td>필수 아님</td></tr>
           </tbody>
         </table>
       </div>
       <div class="flag">
-        <b>*확인 필요</b> — 위치 &ldquo;공유&rdquo; 여부는 카카오맵 SDK가 지도 타일을
-        받아오며 좌표를 카카오 서버로 전달하는지 여부에 달려 있습니다. 이 조사에서는
-        SDK 내부 통신까지는 확인하지 못했습니다. 카카오맵 SDK 이용약관/개발자 문서에서
-        "위치 정보를 자사 서버로 전송하는지"를 확인한 뒤 &ldquo;제3자와 공유&rdquo;
-        여부를 최종 결정해 주세요. (기본값으로 지도 렌더링 SDK는 대부분 &ldquo;공유
-        있음&rdquo;으로 신고하는 것이 안전합니다.)
+        <b>확인 완료</b> — TourApiClient.searchNearby()가 사용자 실시간 좌표를
+        mapX/mapY 파라미터로 TourAPI(정부 공공데이터)에 직접 전송하는 것을 코드에서
+        확인했습니다. 카카오맵 SDK가 좌표를 자체 서버로 추가 전송하는지는 별도
+        확인하지 못했지만, TourAPI 공유가 이미 확정이므로 위치 데이터 유형은 어느
+        쪽이든 &ldquo;공유됨&rdquo;으로 신고하면 됩니다.
       </div>
       <div class="answer" style="margin-top:14px">
         <div class="label">암호화 여부 (공통 질문)</div>
@@ -373,8 +374,9 @@
     </section>
 
     <footer class="page">
-      v1.0.0(versionCode 1) 기준 조사. 로그인 기능(#322)이나 리뷰 신고 기능이 추가되면
-      04·06번 항목은 반드시 다시 검토해야 합니다.
+      2026-08-26 기준 코드 재조사(로그인 기능 병합 완료 반영) — 02·06번 항목을
+      실제 코드 기준으로 갱신했습니다. 리뷰 신고 기능이 추가되면 04번 항목을 다시
+      검토해야 합니다.
     </footer>
   </main>
 </div>
